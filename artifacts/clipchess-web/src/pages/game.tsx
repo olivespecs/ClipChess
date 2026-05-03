@@ -355,15 +355,7 @@ export default function Game() {
               <span className="font-mono text-sm uppercase font-bold text-muted-foreground tracking-widest">{renderStatus()}</span>
             </div>
             
-            {myTurn && !over ? (
-              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
-                <p className="text-sm text-foreground/80 leading-relaxed font-serif">
-                  {gameState.history.length === 0
-                    ? "Copy the sequence below and send it to your opponent so they can join. Then make your first move."
-                    : "Your move. Play on the board, then copy the sequence and send it to your opponent."}
-                </p>
-              </div>
-            ) : over ? (
+            {over ? (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
                 <div className="p-4 bg-muted/50 rounded border border-border/50 text-center">
                   <p className="text-lg font-serif font-bold text-foreground mb-1">Match Concluded</p>
@@ -374,52 +366,57 @@ export default function Game() {
                 </Button>
               </div>
             ) : (
-              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
-                <p className="text-sm text-foreground/80 leading-relaxed font-serif">Awaiting opponent's transmission. Paste their sequence below when received.</p>
-                <form onSubmit={handlePasteSubmit} className="flex gap-2">
-                  <Input 
-                    value={pasteString}
-                    onChange={e => setPasteString(e.target.value)}
-                    placeholder="ClipChess_..."
-                    className="font-mono text-xs bg-background/50 h-10"
-                    data-testid="input-receive-move"
-                  />
-                  <Button type="submit" className="h-10 px-6" data-testid="button-load-move">Load</Button>
-                </form>
-                {error && <p className="text-xs text-destructive font-bold">{error}</p>}
-              </div>
-            )}
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
 
-            {(myTurn || over) && (
-              <motion.div 
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="mt-8 space-y-3 pt-6 border-t border-border/50"
-              >
-                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  {gameState.history.length === 0 ? "Share with Opponent" : "Current Sequence"}
-                </p>
-                <div className="relative group">
-                  <Input 
-                    readOnly 
-                    value={encodeState(gameState)} 
-                    className="font-mono text-[10px] pr-12 bg-background/80 border-primary/30 h-12 text-primary/80 selection:bg-primary/30 cursor-copy"
-                    onClick={handleCopy}
-                  />
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
-                    className="absolute right-1 top-1 h-10 w-10 p-0 hover:bg-primary hover:text-primary-foreground transition-colors"
-                    onClick={handleCopy}
-                    data-testid="button-copy-state"
-                  >
-                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                  </Button>
+                <div className="space-y-2">
+                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    {myTurn
+                      ? gameState.history.length === 0
+                        ? "1. Send this to your opponent, then make your move"
+                        : "2. Send this to your opponent"
+                      : "Waiting for opponent — paste their reply below"}
+                  </p>
+                  <div className="relative">
+                    <Input
+                      readOnly
+                      value={encodeState(gameState)}
+                      className="font-mono text-[10px] pr-12 bg-background/80 border-primary/30 h-12 text-primary/80 cursor-copy"
+                      onClick={handleCopy}
+                      data-testid="input-current-state"
+                    />
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="absolute right-1 top-1 h-10 w-10 p-0 hover:bg-primary hover:text-primary-foreground transition-colors"
+                      onClick={handleCopy}
+                      data-testid="button-copy-state"
+                    >
+                      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                  {copied && (
+                    <p className="text-xs text-primary font-mono animate-in fade-in">Copied to clipboard</p>
+                  )}
                 </div>
-                {copied && (
-                  <p className="text-xs text-primary font-mono animate-in fade-in">Sequence copied to clipboard</p>
-                )}
-              </motion.div>
+
+                <div className="space-y-2 pt-4 border-t border-border/30">
+                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    {myTurn ? "Or load opponent's reply" : "Paste opponent's reply"}
+                  </p>
+                  <form onSubmit={handlePasteSubmit} className="flex gap-2">
+                    <Input
+                      value={pasteString}
+                      onChange={e => { setPasteString(e.target.value); setError(""); }}
+                      placeholder="ClipChess_..."
+                      className="font-mono text-xs bg-background/50 h-10"
+                      data-testid="input-receive-move"
+                    />
+                    <Button type="submit" className="h-10 px-6" data-testid="button-load-move">Load</Button>
+                  </form>
+                  {error && <p className="text-xs text-destructive font-bold">{error}</p>}
+                </div>
+
+              </div>
             )}
           </div>
 

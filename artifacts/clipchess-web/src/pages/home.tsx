@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { createFreshState, encodeState, isValidPayload, decodeState, PlayerColor } from "@/lib/chess-state";
+import { Terminal } from "lucide-react";
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -133,6 +134,27 @@ export default function Home() {
             {error}
           </div>
         )}
+
+        <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground/50 font-mono tracking-wider">
+          <button
+            onClick={() => setLocation("/docs")}
+            className="flex items-center gap-1.5 hover:text-primary transition-colors"
+            data-testid="link-terminal-docs"
+          >
+            <Terminal className="w-3 h-3" />
+            Terminal Guide
+          </button>
+          <span className="opacity-30">·</span>
+          <a
+            href="https://github.com/olivespecs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-primary transition-colors"
+            data-testid="link-github"
+          >
+            github.com/olivespecs
+          </a>
+        </div>
       </div>
     </div>
   );

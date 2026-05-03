@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "ClipChess"
+version = "1.0.0"
+id = "artifacts/clipchess-web"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24845
+
+[services.development]
+run = "pnpm --filter @workspace/clipchess-web run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/clipchess-web", "run", "build" ]
+publicDir = "artifacts/clipchess-web/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24845"
+BASE_PATH = "/"

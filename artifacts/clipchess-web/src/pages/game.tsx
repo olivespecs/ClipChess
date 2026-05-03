@@ -357,7 +357,11 @@ export default function Game() {
             
             {myTurn && !over ? (
               <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
-                <p className="text-sm text-foreground/80 leading-relaxed font-serif">It is your turn. Play your move to generate the next state sequence.</p>
+                <p className="text-sm text-foreground/80 leading-relaxed font-serif">
+                  {gameState.history.length === 0
+                    ? "Copy the sequence below and send it to your opponent so they can join. Then make your first move."
+                    : "Your move. Play on the board, then copy the sequence and send it to your opponent."}
+                </p>
               </div>
             ) : over ? (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
@@ -386,13 +390,15 @@ export default function Game() {
               </div>
             )}
 
-            {(myTurn || over) && gameState.history.length > 0 && (
+            {(myTurn || over) && (
               <motion.div 
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 className="mt-8 space-y-3 pt-6 border-t border-border/50"
               >
-                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Current Sequence</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  {gameState.history.length === 0 ? "Share with Opponent" : "Current Sequence"}
+                </p>
                 <div className="relative group">
                   <Input 
                     readOnly 

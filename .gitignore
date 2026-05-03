@@ -47,6 +47,11 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+.replit
+.replitignore
+replit.md
+.replit-artifact/
+scripts/post-merge.sh
 
 # Python
 .pythonlibs/
